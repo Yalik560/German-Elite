@@ -7,20 +7,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Java (Required for Android)
+        uses: actions/setup-java@v4
         with:
-          python-version: '3.11'
+          distribution: 'temurin'
+          java-version: '17'
           
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           
-      - name: Install Flet and Build
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install Flet Build Tools
         run: |
-          pip install flet
-          # Используем main.py, так как он в твоем репозитории
+          pip install "flet[build]"
+          
+      - name: Build APK
+        run: |
+          # Собираем приложение под именем EliteDictionary
           flet build apk main.py --product "EliteDictionary"
 
       - name: Upload APK
