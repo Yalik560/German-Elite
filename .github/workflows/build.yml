@@ -1,0 +1,22 @@
+name: Build Elite Dictionary APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install Flet and Build
+        run: |
+          pip install flet[build]
+          flet build apk main.pyw --product "EliteDictionary"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: elite-dictionary-apk
+          path: build/apk/app-release.apk
