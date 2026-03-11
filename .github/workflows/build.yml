@@ -5,18 +5,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+      - uses: actions/checkout@v4
       
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
       - name: Install Flet and Build
         run: |
-          pip install flet[build]
-          flet build apk main.pyw --product "EliteDictionary"
+          pip install flet
+          # Используем main.py, так как он в твоем репозитории
+          flet build apk main.py --product "EliteDictionary"
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: elite-dictionary-apk
           path: build/apk/app-release.apk
